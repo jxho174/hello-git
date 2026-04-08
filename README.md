@@ -1,1 +1,1 @@
-# Hello Git
+This is my code for my portfolio to apply for software engineer job 
