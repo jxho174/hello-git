@@ -3,7 +3,8 @@ using namespace std;
 
 int main()
 {
-	cout << "Hello, Git!" << endl;
-	cout << "I love C++" ;
+	for (int i = 0; i <= 3; ++i) {
+		cout << "Hello, Git! This is line " << i << endl;
+	}
 	return 0;
 }
