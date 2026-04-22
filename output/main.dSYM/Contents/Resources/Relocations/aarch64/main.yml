@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/junxi/Documents/GitHub/hello-git/output/main'
+relocations:     []
+...
