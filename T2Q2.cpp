@@ -6,6 +6,7 @@ void square_generator(void) {
     int value;
     while(true)
     {
+        // Error Checking
         cout << "Enter the length of the side of the square between 1 to 20: ";
         getline(cin, input);
         try{
@@ -16,6 +17,7 @@ void square_generator(void) {
             break;
         }
 
+        // Value Checking (1 - 20)
         if (value < 1 || value > 20) {
             cout << "Ending program. Only integer values between 1 to 20 accepted";
             break;

@@ -5,30 +5,45 @@
 
 using namespace std;
 
+// 1. Prototype added so main() knows this exists!
+double double_input(void); 
+
 int main()
 {
     double weight = 0, height = 0, bmi = 0;
     string category;
+    
     cout << "Get weight in kg: ";
     weight = double_input();
 
-    cout << "Get height in meter: ";
-    height = double_input();
+    while(true) {
+        cout << "Get height in meter: ";
+        height = double_input();
+
+        if (height > 3) {
+            cout << "Please enter your height in meter.\n";
+            cout << "Aint no way someone " << height << "m this talls!\n\n";
+        }
+        else {
+            break; // Valid height, escape the loop!
+        }
+        // 2. Removed the redundant 'continue' that was here
+    }
 
     bmi = weight / pow(height, 2);
     cout << "Your bmi = " << bmi << endl;
 
-    // Categorize the BMI value
+    // 3. Fixed the continuous number boundaries
     if (bmi < 18.5) {
         category = "Underweight";
     }
-    else if (bmi >= 18.5 && bmi <= 24.9) {
+    else if (bmi < 25.0) { 
         category = "Healthy";
     }
-    else if (bmi >= 25 && bmi <= 29.9) {
+    else if (bmi < 30.0) {
         category = "Overweight";
     }
-    else if (bmi >= 30) {
+    else { // Catches 30.0 and anything higher
         category = "Obesity";
     }
 

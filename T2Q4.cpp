@@ -9,8 +9,10 @@ int main()
     int myArray[] = {3, 8, 11, 2};
     int min = 10000, max = 0;
     int numItem = sizeof(myArray)/sizeof(int);
+    
     showArray(myArray, numItem);
     getMinMax(myArray, numItem, min, max);
+
     cout << "\n The maximum = " << max;
     cout << "\n The minimum = " << min;
     return 0;
