@@ -1,1 +1,4 @@
-This is my code for my portfolio to apply for software engineer job 
+Here are some C++ codes.
+Topic Cover:
+1. Basic C++
+2. Object Oriented Programming
