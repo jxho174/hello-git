@@ -1,87 +1,99 @@
 #include <iostream>
-#include <stdexcept>
 #include <string>
-
+#include <stdexcept>
 using namespace std;
 
-int integer_input(void);
+void print_menu(void);
+int int_input(void);
+void operation(int option, int num1, int num2); // Changed to void since it handles its own printing
 
 int main()
 {
-    string input;
-    int symbol = 0, num1 = 0, num2 = 0;
-
-    cout << "Simple calculator" << endl;
-    while(true) {
-        cout << "Enter option: 1)+ 2)- 3)* 4)/ 5) mod(x1, x2) -1) Exit  Your selection -> ";
-        symbol = integer_input();
-        if (symbol == -1) {
-            break;
+    while(true) 
+    {
+        print_menu();
+        int option = int_input(); 
+        
+        // Proper C++ control flow for your loop
+        if (option == -1) {
+            cout << "Exiting calculator. Goodbye!\n";
+            break; 
         }
-        else if (symbol < 1 || symbol > 5) {
-            cout << "Invalid option! Please try again." << endl;
+        if (option < 1 || option > 5) {
+            cout << "Invalid option! Please try again.\n\n";
             continue;
         }
 
         cout << "Enter first number: ";
-        num1 = integer_input();
+        int num1 = int_input();
+
         cout << "Enter second number: ";
-        num2 = integer_input();
+        int num2 = int_input();
 
-        cout << endl;
-
-        switch(symbol) {
-            case 1:
-                cout << num1 << " + " << num2 << " = " << num1 + num2 << endl;
-                break;
-            case 2:
-                cout << num1 << " - " << num2 << " = " << num1 - num2 << endl;
-                break;
-            case 3:
-                cout << num1 << " * " << num2 << " = " << num1 * num2 << endl;
-                break;
-            case 4:
-                if (num2 != 0) {
-                    cout << num1 << " / " << num2 << " = " << num1 / num2 << endl;
-                }
-                else {
-                    cout << "Cannot divide by zero!" << endl;
-                }
-                break;
-            case 5:
-                if (num2 != 0) {
-                    cout << "mod(" << num1 << ", " << num2 << ") = " << num1 % num2 << endl;
-                }
-                else {
-                    cout << "Cannot divide by zero!" << endl;
-                }
-                break;
-            default:
-                cout << "Invalid option! Please try again." << endl;
-                break;
-        }
+        // Call the function to do the math and print the result
+        operation(option, num1, num2);
+        cout << endl; // Extra space for readability
     }
-
     return 0;
 }
 
-// try and catch for invalid input and out of range input
-int integer_input(void) {
-    string input;
-    int integer;
-    while(true) {
-        getline(cin, input);
+void print_menu(void) {
+    cout << "--- Simple Calculator ---\n";
+    cout << "Enter option: \n";
+    cout << "1. +\n";
+    cout << "2. -\n";
+    cout << "3. *\n";
+    cout << "4. /\n";
+    cout << "5. mod(x1, x2)\n";
+    cout << "-1. Exit\n";
+    cout << "Your selection -> ";
+}
+
+int int_input(void)
+{
+    string prompt;
+    // An infinite loop here is safer than having the function call itself over and over!
+    while (true) {
+        getline(cin >> ws, prompt);
+
         try {
-            integer = stoi(input);
-            return integer; // Moved this inside the try block so it only returns if stoi succeeds
-        }
-        catch(const invalid_argument& e) {
-            cout << "Invalid input! Please enter an integer: ";
-            continue;
-        }
-        catch(const out_of_range& e) {
+            return stoi(prompt);
+        } catch (const invalid_argument& e) {
+            cout << "Invalid argument! Please enter a valid integer: ";
+        } catch (const out_of_range& e) {
             cout << "Number is too large! Please enter a smaller integer: ";
-            continue;
         }
+    }
+}
+
+void operation(int option, int num1, int num2)
+{
+    switch(option) {
+        case 1:
+            cout << num1  << " + " << num2 << " = " << num1 + num2 << endl;
+            break;
+        case 2:
+            cout << num1  << " - " << num2 << " = " << num1 - num2 << endl;
+            break;
+        case 3:
+            cout << num1  << " * " << num2 << " = " << num1 * num2 << endl;
+            break;
+        case 4:
+            if (num2 != 0) {
+                // If you want accurate division (like 5 / 2 = 2.5), you should cast to double!
+                cout << num1  << " / " << num2 << " = " << (double)num1 / num2 << endl;
+            }
+            else {
+                cout << "Error: Cannot divide by 0\n";
+            }
+            break;
+        case 5:
+            if (num2 != 0) {
+                cout << "mod(" << num1 << ", " << num2 << ") = " << num1 % num2 << endl;
+            }
+            else {
+                cout << "Error: Cannot modulo by 0\n";
+            }
+            break;
     }
 }
