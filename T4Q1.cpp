@@ -1,115 +1,124 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <limits> // [NEW] Needed for the robust cin.ignore
-
+#include <stdio.h>
 using namespace std;
 
-class Purchase{
+class Purchase {
+    public:
+        Purchase(string name = "", int quantity = 0, float p = 0.0);
+        void set_data(string name, int quantity, float p);
+        void calculate(void);
+        void print(void);
+        static void printtotal(const vector<Purchase>& purchase);
+
     private:
-        string itemName;
         int quantity;
         float price;
+        string itemName;
         float total;
-    public:
-        Purchase();
-        Purchase(string itemName, int quantity, float price);
-        void set_data(string itemName, int quantity, float price);
-        void calculate();
-        void print();
-        float getTotal(); // [NEW] We need a public getter to read the private 'total'
 };
 
-Purchase::Purchase() {
-    itemName = "";
-    quantity = 0;
-    price = 0.0;
-    total = 0.0;
-}
-
-Purchase::Purchase(string itemName, int quantity, float price) {
-    this->itemName = itemName;
-    this->quantity = quantity;
-    this->price = price;
-    this->total = 0.0; 
-}
-
-void Purchase::set_data(string itemName, int quantity, float price) {
-    this->itemName = itemName;
-    this->quantity = quantity;
-    this->price = price;
-}
-
-void Purchase::calculate() {
-    total = quantity * price;
-}
-
-void Purchase::print() {
-    cout << "================================\n";
-    cout << "Subtotal\t: RM " << total << endl;
-    cout << "================================\n";
-}
-
-// [NEW] Implementation of the getter
-float Purchase::getTotal() {
-    return total;
-}
-
-// [NEW] We must pass the vector into this function so it can see it!
-void getSubtotal(vector<Purchase> all_purchases) {
-    float subtotal = 0.0; // [NEW] Initialize our subtotal variable
-    
-    // [NEW] Correct C++ syntax for looping through a vector
-    for (Purchase p : all_purchases) {
-        subtotal += p.getTotal(); // Ask the class for the private total safely
+Purchase::Purchase(string name, int quantity, float p)
+    : quantity(quantity), price(p), itemName(name){
+        this->total = 0;
     }
-    
-    cout << "\n================================\n";
-    cout << "GRAND SUBTOTAL: RM " << subtotal << endl;
-    cout << "================================\n";
+
+void Purchase::set_data(string name, int quantity, float p)
+{
+    this->itemName = name;
+    this->quantity = quantity;
+    this->price = p;
+}
+
+void Purchase::calculate(void)
+{
+    this->total = this->price * this->quantity;
+}
+
+void Purchase::print(void)
+{
+    cout << "========================\n";
+    cout << "Subtotal : RM " << this->total << endl;
+    cout << "========================\n\n";
+}
+
+void Purchase::printtotal(const vector<Purchase>& purchase)
+{
+    int total_quantity = 0;
+    float grand_total = 0.0;
+
+    for (const Purchase& item : purchase) {
+        total_quantity += item.quantity;
+        grand_total += item.total;
+    }
+
+    cout << "========================\n";
+    cout << "\tGRAND TOTAL\n";
+    cout << "========================\n";
+    cout << "Total number of items\t: " << total_quantity << endl;
+    cout << "Total amount to be paid : RM" << grand_total << endl;
+}
+
+int integer_input(void)
+{
+    string prompt;
+    getline(cin >> ws, prompt);
+    try {
+        return stoi(prompt);
+    }
+    catch (const invalid_argument& e) {
+        cout << "Invalid input! Please enter a valid number: ";
+        return integer_input();
+    }
+}
+
+float float_input(void)
+{
+    string prompt;
+    getline(cin >> ws, prompt);
+    try {
+        return stof(prompt);
+    }
+    catch (const invalid_argument& e) {
+        cout << "Invalid input! Please enter a valid number: ";
+        return float_input();
+    }
 }
 
 int main()
 {
-    cout << "================================\n";
-    cout << "\tWELCOME\n";
-    cout << "================================\n";
-
-    vector <Purchase> purchases;
-    Purchase p;
-    
-    string itemName;
+    vector<Purchase> p1;
+    Purchase item;
+    string name;
     int quantity;
     float price;
 
+    cout << "========================\n";
+    cout << "\tWELCOME\n";
+    cout << "========================\n";
+
     while(true)
     {
-        cout << "\nEnter item ('Q' to quit): ";
-        getline(cin, itemName);
+         cout << "Enter item ('Q' to quit) : ";
+        getline(cin >> ws, name);
 
-        // [NEW] Proper C++ string comparison
-        if (itemName == "Q" || itemName == "q") {
-            break; 
+        if (name == "Q") {
+            break;
         }
 
-        cout << "Enter quantity: ";
-        cin >> quantity;
+        cout << "Enter quantity  : ";
+        quantity = integer_input();
 
-        cout << "Enter price: RM ";
-        cin >> price;
+        cout << "Enter price\t: RM ";
+        price = float_input();
 
-        // [NEW] CRITICAL FIX: Flush the Enter key out of the pipeline!
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        p.set_data(itemName, quantity, price);
-        p.calculate();
-        p.print();
-
-        purchases.push_back(p);
+        item.set_data(name, quantity, price);
+        item.calculate();
+        item.print();
+        p1.push_back(item);
     }
 
-    // [NEW] Pass the vector into our function
-    getSubtotal(purchases);
+    Purchase::printtotal(p1);
 
     return 0;
 }

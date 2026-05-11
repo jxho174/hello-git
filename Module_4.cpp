@@ -1,38 +1,28 @@
 #include <iostream>
 using namespace std;
 
-class Time{
+class Student{
     private:
-        int day, hour, minute, second;
-
+        string name;
+        int age;
+        double cgpa;
     public:
-        Time() {
-            day = 0;
-            hour = 0;
-            minute = 0;
-            second = 0;
+        Student(string a_name = "", int a_age = 18, double a_cgpa = 3.00) {
+            this->name = a_name;
+            this->age = a_age;
+            this->cgpa = a_cgpa;
         }
-
-        Time(int d, int h, int m, int s){
-            day = d;
-            hour = h;
-            minute = m;
-            second = s;
-        }
-
-        void displayTime(){
-            cout << "Day: \t" << day << endl;
-            cout << "Hour: \t" << hour << endl;
-            cout << "Minute: " << minute << endl;
-            cout << "Second: " << second << endl;
+        void print_info() {
+            cout << "Student Name: " << this->name << endl;
+            cout << "Student Age: " << this->age << endl;
+            cout << "Student CGPA: " << this->cgpa << endl;
         }
 };
 
 
-int main()
-{
-    Time t1;
-    t1.displayTime();
+int main() {
+    Student s1;
+    s1.print_info();
 
     return 0;
 }
