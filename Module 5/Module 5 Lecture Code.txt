@@ -1,0 +1,244 @@
+Lecture code for module 5
+
+Slide 4 - Write to a file
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+  cout << "Hello World!\n";
+
+  ofstream myfile;
+  myfile.open("example.txt");
+  myfile << "Writing to this file";
+  myfile.close();
+
+}
+
+OOP equivalent
+
+// write data to text file
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class FileStorage {
+  ofstream mfile; // obj to store text in file
+  public:
+  FileStorage(string filename) 
+  {   mfile.open(filename); }
+  void writeToFile(string str) {
+    mfile << str;
+  }
+
+};
+
+int main() {
+  FileStorage ff("example.txt");
+  ff.writeToFile("Writing this to a file.\n");
+}
+
+
+
+
+Slide 11
+// writing to a text file
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main () {
+  ofstream myfile ("example.txt");
+  if (myfile.is_open())
+  {
+    myfile << "This is a line.\n";
+    myfile << "This is another line.\n";
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+Slide 12
+// reading data from a  text file
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+int main () {
+  string line;
+  ifstream myfile ("example.txt");
+  if (myfile.is_open())
+  {
+    while (! myfile.eof() )
+    {
+      getline (myfile,line);
+      cout << line << endl;
+    }
+    myfile.close();
+  }
+
+  else cout << "Unable to open file"; 
+
+  return 0;
+}
+
+// --------------------------------------------------------
+// slide 23 using object to save in binary file 
+
+#include <iostream>
+#include <fstream>
+#define FILE_NAME "emp.dat"
+
+using namespace std;
+
+// class employee declaration
+class Employee
+{
+private:
+    int empID;
+    char empName[100];
+    char designation[100];
+    int ddj, mmj, yyj;
+    int ddb, mmb, yyb;
+
+public:
+    // function to read employee details
+    void readEmployee()
+    {
+        cout << "EMPLOYEE DETAILS" << endl;
+        cout << "ENTER EMPLOYEE ID : ";
+        cin >> empID;
+        cin.ignore(1);
+        cout << "ENTER  NAME OF THE EMPLOYEE : ";
+        cin.getline(empName, 100);
+
+        cout << "ENTER DESIGNATION : ";
+        cin.getline(designation, 100);
+
+        cout << "ENTER DATE OF JOIN:" << endl;
+        cout << "DATE : ";
+        cin >> ddj;
+        cout << "MONTH: ";
+        cin >> mmj;
+        cout << "YEAR : ";
+        cin >> yyj;
+
+        cout << "ENTER DATE OF BIRTH:" << endl;
+        cout << "DATE : ";
+        cin >> ddb;
+        cout << "MONTH: ";
+        cin >> mmb;
+        cout << "YEAR : ";
+        cin >> yyb;
+    }
+    // function to write employee details
+    void displayEmployee()
+    {
+        cout << "EMPLOYEE ID: " << empID << endl
+             << "EMPLOYEE NAME: " << empName << endl
+             << "DESIGNATION: " << designation << endl
+             << "DATE OF JOIN: " << ddj << "/" << mmj << "/" << yyj << endl
+             << "DATE OF BIRTH: " << ddb << "/" << mmb << "/" << yyb << endl;
+    }
+};
+
+int main()
+{
+
+    // object of Employee class
+    Employee emp;
+    // read employee details
+    emp.readEmployee();
+
+    // write object into the file
+    fstream file;
+    file.open(FILE_NAME, ios::out | ios::binary);
+    if (!file)
+    {
+        cout << "Error in creating file...\n";
+        return -1;
+    }
+
+    file.write((char *)&emp, sizeof(emp));
+    file.close();
+    cout << "Date saved into file the file.\n";
+
+    // open file again
+    file.open(FILE_NAME, ios::in | ios::binary);
+    if (!file)
+    {
+        cout << "Error in opening file...\n";
+        return -1;
+    }
+
+    if (file.read((char *)&emp, sizeof(emp)))
+    {
+        cout << endl
+             << endl;
+        cout << "Data extracted from file..\n";
+        // print the object
+        emp.displayEmployee();
+    }
+    else
+    {
+        cout << "Error in reading data from file...\n";
+        return -1;
+    }
+
+    file.close();
+    return 0;
+}
+
+
+
+
+// slide 24 -------------------------------
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+    streampos size;
+    char *memblock;
+
+    char buffer[3] = {'a', 'b', 'c'};
+    // save buffer data in file
+    ofstream myFile("data.bin", ios::out | ios::binary);
+    cout << "\n Saving the data :" << buffer;
+    myFile.write(buffer, 3);
+    myFile.close();
+
+    // read it back
+    ifstream ifile;
+    ifile.open("data.bin", ios::in | ios::binary | ios::ate);
+    size = ifile.tellg(); // note, get pointer at end of file
+    cout << "\n File size (bytes) = " << size;
+
+    memblock = new char[size];
+    ifile.seekg(0, ios::beg); // move get pointer to beginning
+    ifile.read(memblock, size);
+
+    cout << "\n Data read from file : \n ";
+    for (int i = 0; i < size; i++)
+    {
+        cout << memblock[i];
+    }
+    ifile.close();
+}
+
+
+
